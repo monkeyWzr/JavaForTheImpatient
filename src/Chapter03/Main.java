@@ -140,8 +140,22 @@ public class Main {
     
     public static void sortFiles() {
         File[] files = new File("e:/music").listFiles();
-        Arrays.sort(files, Comparator.comparing(File::isDirectory).reversed().thenComparing(File::getName));
-        
+//        Use methods reference
+//        Arrays.sort(files, Comparator.comparing(File::isDirectory).reversed().thenComparing(File::getName));
+        Arrays.sort(files, (first, second) -> {
+            File f1 = (File) first;
+            File f2 = (File) second;
+            if (f2.isDirectory())
+                if (f1.isDirectory())
+                    return f1.getName().compareTo(second.getName());
+                else
+                    return 1;
+            else
+                if (f1.isDirectory())
+                    return -1;
+                else
+                    return f1.getName().compareTo(f2.getName());
+        });
         for (File file : files)
             System.out.println(file.getName());
             
@@ -162,6 +176,6 @@ public class Main {
 //        testRunInOrder();
 //        listDirectory();
 //        listFiles();
-//        sortFiles();
+        sortFiles();
     }
 }
