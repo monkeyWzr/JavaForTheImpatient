@@ -1,6 +1,7 @@
 package Chapter03;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.concurrent.Executor;
@@ -8,6 +9,7 @@ import java.util.concurrent.Executors;
 import java.util.function.IntConsumer;
 import java.io.File;
 import java.io.FileFilter;
+import java.io.FilenameFilter;
 
 public class Main {
 
@@ -121,7 +123,35 @@ public class Main {
     }
     
     public static void listFiles() {
+        FilenameFilter filter = new FilenameFilter() {
+
+            @Override
+            public boolean accept(File dir, String name) {
+                 return name.endsWith(".ape");
+            }
+            
+        };
+        String[] files = new File("e:/music").list(filter);
+//        Or use lambda expression
+//        String[] files = new File("e:/music").list((dir, name) -> name.endsWith(".ape"));
+        for (String file : files)
+            System.out.println(file);
+    }
+    
+    public static void sortFiles() {
+        File[] files = new File("e:/music").listFiles();
+        Arrays.sort(files, Comparator.comparing(File::isDirectory).reversed().thenComparing(File::getName));
         
+        for (File file : files)
+            System.out.println(file.getName());
+            
+    }
+    
+    public static Runnable runTasks(Runnable[] tasks) {
+        return () -> {
+            for (Runnable task : tasks)
+                task.run();
+        };
     }
     
     public static void main(String[] args) {
@@ -130,8 +160,8 @@ public class Main {
 //        testRepeat();
 //        testRunTogether();
 //        testRunInOrder();
-        listDirectory();
-        
+//        listDirectory();
+//        listFiles();
+//        sortFiles();
     }
-
 }
